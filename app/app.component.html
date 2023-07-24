@@ -1,0 +1,57 @@
+<div class="col-md-12 sideBar p-0">
+  <div class="RedirecLinks d-none">
+    <a href="#">
+      <span>
+        <i class="fa fa-bars"></i>
+      </span> Dashboard </a>
+  </div>
+  <div class="row">
+    <div class="col-md-2">
+      <div *ngFor="let item of moduleChildList | filter : 'parentID' : '0'; let i = index">
+        <div style="font-size: 20px;font-weight: bold;" (click)="collapse(item.moduleName , $event)"
+          class=" Departments ForToggleUser">{{ item.moduleTitle }}<span> <i class="fa fa-angle-down"></i></span></div>
+        <div id="{{item.moduleName}}" class="SubMeanu toggleUserPortion">
+          <div *ngFor="let items of moduleChildList | filter : 'parentID' : item.moduleID">
+            <div *ngIf="items.hasChild == '0'">
+              <div class="toggleTicketLink">
+                <a style="padding-left: 50px;" [routerLink]="['dynamic']" [state]="{ id:1 , name:'Angular'}">
+                  <span>
+                    <i class="{{items.faIcons}}"></i>
+                  </span>{{items.moduleTitle}}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="{{item.moduleName}}" class="TopSubMeanu toggleSettingPortion">
+          <div *ngFor="let itm of moduleChildList | filter : 'parentID' : item.moduleID">
+            <div *ngIf="itm.hasChild == '1'">
+              <div style=" padding-left: 50px; color:red; font-size: 15px;font-weight: bold;"
+                (click)="collapse(itm.moduleName , $event)" class="Departments ForToggleGeneral">{{itm.moduleTitle}}
+                 <span>
+                  <i class="fa fa-angle-down"></i>
+                </span>
+              </div>
+            </div>
+            <div id="{{itm.moduleName}}" class="SubMeanu2 ForToggleGeneralPortion">
+              <div *ngFor="let items of moduleChildList | filter : 'parentID' : itm.moduleID" class="toggleTicketLink">
+                <a style="padding-left: 100px;" routerLink="/{{items.moduleName}}">
+                  <span>
+                    <i class="{{items.faIcons}}"></i>
+                  </span>
+                  {{items.moduleTitle}}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="col-md-10"><router-outlet></router-outlet>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,57 @@
+<h1>{{title}}</h1>
+<form [formGroup]="dynamicForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <ng-container *ngFor="let section of sections">
+      <div class="col-md-5">
+        <h3>{{ section.name }}</h3>
+        <div *ngFor="let control of section.controls | orderBy: 'order'">
+          <div class="mb-3">
+            <label class="form-label">{{ control.label }}</label>
+            <!-- Render different types of controls based on the control type -->
+            <ng-container [ngSwitch]="control.type">
+              <input *ngSwitchCase="'hidden'" [type]="control.type" [formControlName]="control.name">
+              <input style="width: 100%;" class="form-control" *ngSwitchCase="'text'" [type]="control.type"
+                [formControlName]="control.name">
+              <input style="width: 100%;" class="form-control" *ngSwitchCase="'number'" [type]="control.type"
+                [formControlName]="control.name">
+              <select class="form-select" *ngSwitchCase="'select'" [formControlName]="control.name">
+                <option *ngFor="let option of control.options" [value]="option.value">{{ option.text }}</option>
+              </select>
+              <div class="form-check" *ngSwitchCase="'checkbox'">
+                <div *ngFor="let option of control.options">
+                  <label class="form-check-label">
+                    <input class="form-control-input" style="margin-right: -90px;" type="checkbox"
+                      [formControl]="$any(dynamicForm).get(control.name)" [value]="option">
+                    {{ option }}
+                  </label>
+                </div>
+              </div>
+              <div class="form-check" *ngSwitchCase="'radio'">
+                <div *ngFor="let option of control.options">
+                  <label class="form-check-label">
+                    <input class="form-control-input" style="margin-right: -90px;" type="radio"
+                      [formControl]="$any(dynamicForm).get(control.name)" [value]="option">
+                    {{ option }}
+                  </label>
+                </div>
+              </div>
+              <textarea style="width: 100%;" class="form-control" *ngSwitchCase="'textarea'"
+                [formControlName]="control.name"></textarea>
+            </ng-container>
+          </div>
+          <div 
+            *ngIf="$any(dynamicForm).get(control.name).invalid && ($any(dynamicForm).get(control.name).touched)"
+            class="error">
+            This field is required.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-1"></div>
+    </ng-container>
+  </div>
+
+
+
+
+  <button class="btn btn-success" type="submit">Save</button>
+</form>
